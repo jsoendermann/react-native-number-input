@@ -15,7 +15,7 @@
     "url": "git@github.com:jsoendermann/react-native-number-input.git"
   },
   "scripts": {
-    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write \"src/**/*.{ts,tsx}\"",
+    "prettier": "prettier --single-quote --no-semi --print-width 100 --trailing-comma all --write \"src/**/*.{ts,tsx}\"",
     "ts:build": "tsc",
     "ts:watch": "tsc --watch",
     "prepare": "npm run ts:build"
