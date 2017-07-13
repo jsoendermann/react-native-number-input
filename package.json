@@ -18,7 +18,7 @@
     "prettier": "prettier --single-quote --no-semi --trailing-comma all --write \"src/**/*.{ts,tsx}\"",
     "ts:build": "tsc",
     "ts:watch": "tsc --watch",
-    "prepublish": "npm run ts:build"
+    "prepare": "npm run ts:build"
   },
   "peerDependencies": {
     "react": "^16.0.0-alpha.12",
