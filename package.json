@@ -1,6 +1,6 @@
 {
   "name": "react-native-number-input",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A component to quickly enter numbers with a fixed number of digits.",
   "main": "./dist/NumberInput",
   "typings": "./dist/NumberInput.d.ts",
