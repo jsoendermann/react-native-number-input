@@ -32,7 +32,7 @@ export interface Props {
 
 export type State = InputState
 
-export class NumberInput extends React.Component<Props, State> {
+export default class NumberInput extends React.Component<Props, State> {
   static defaultProps: Partial<Props> = {
     style: {},
 
