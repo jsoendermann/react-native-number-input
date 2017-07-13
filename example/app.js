@@ -4,16 +4,10 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import React, { Component } from 'react'
+import { AppRegistry, StyleSheet, Text, View } from 'react-native'
 
-import NumberInput from '..'
-
+import NumberInput from 'react-native-number-input'
 
 export default class App extends Component {
   state = { value: 12 }
@@ -22,17 +16,14 @@ export default class App extends Component {
       <View style={styles.container}>
         <NumberInput
           style={{ width: 300 }}
-
           title="Haluo"
-
           onValueChange={console.log}
           onClear={() => console.log('CLEAR')}
-
           numberOfIntegerDigits={4}
           numberOfDecimalDigits={2}
         />
       </View>
-    );
+    )
   }
 }
 
@@ -53,4 +44,4 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
-});
+})
