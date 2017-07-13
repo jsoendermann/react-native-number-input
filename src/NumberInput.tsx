@@ -1,8 +1,14 @@
 import * as React from 'react'
-import { View, TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native'
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+} from 'react-native'
 
 import { getDigitAtIndex, setDigitAtIndex } from './utils'
-
 
 export interface InputState {
   value: number | null
@@ -33,8 +39,8 @@ export class NumberInput extends React.Component<Props, State> {
     title: '',
     unitString: '',
 
-    onValueChange: () => { },
-    onClear: () => { },
+    onValueChange: () => {},
+    onClear: () => {},
 
     numberOfDecimalDigits: 0,
   }
@@ -45,9 +51,7 @@ export class NumberInput extends React.Component<Props, State> {
   }
 
   private getInputState = () =>
-    this.props.inputState
-      ? this.props.inputState
-      : this.state
+    this.props.inputState ? this.props.inputState : this.state
 
   private onDigitPress(digit: string) {
     const { value, nextDigitIndex } = this.getInputState()
@@ -67,16 +71,23 @@ export class NumberInput extends React.Component<Props, State> {
       } else {
         newValue = Number(
           value.toFixed(nextDigitIndex - this.props.numberOfIntegerDigits) +
-          digit,
+            digit,
         )
       }
     } else {
-      const valueString = [digit, ...Array(this.props.numberOfIntegerDigits - 1).fill('0')]
+      const valueString = [
+        digit,
+        ...Array(this.props.numberOfIntegerDigits - 1).fill('0'),
+      ]
       newValue = Number(valueString.join(''))
     }
 
     if (this.props.inputState) {
-      this.props.onValueChange && this.props.onValueChange(newValue, this.props.inputState.nextDigitIndex + 1)
+      this.props.onValueChange &&
+        this.props.onValueChange(
+          newValue,
+          this.props.inputState.nextDigitIndex + 1,
+        )
     } else {
       this.setState({
         value: newValue,
@@ -94,14 +105,24 @@ export class NumberInput extends React.Component<Props, State> {
 
     // typeof value === 'number' is necessary to make TypeScript shut up
     if (typeof value === 'number' && Number.isFinite(value)) {
-      for (let i = 0; i < this.props.numberOfIntegerDigits + this.props.numberOfDecimalDigits!; i++) {
+      for (
+        let i = 0;
+        i <
+        this.props.numberOfIntegerDigits + this.props.numberOfDecimalDigits!;
+        i++
+      ) {
         if (i < nextDigitIndex) {
-          valueArray.push(getDigitAtIndex(value, this.props.numberOfIntegerDigits, i))
+          valueArray.push(
+            getDigitAtIndex(value, this.props.numberOfIntegerDigits, i),
+          )
         } else {
           valueArray.push(null)
         }
 
-        if (i === this.props.numberOfIntegerDigits - 1 && this.props.numberOfDecimalDigits! > 0) {
+        if (
+          i === this.props.numberOfIntegerDigits - 1 &&
+          this.props.numberOfDecimalDigits! > 0
+        ) {
           valueArray.push('.')
         }
       }
@@ -115,13 +136,23 @@ export class NumberInput extends React.Component<Props, State> {
     }
 
     const clearButtonDisabled = nextDigitIndex === 0
-    const digitButtonsDisabled = nextDigitIndex >=
+    const digitButtonsDisabled =
+      nextDigitIndex >=
       this.props.numberOfIntegerDigits + this.props.numberOfDecimalDigits!
 
     return (
       <View style={[{ height: 140 }, this.props.style]}>
-        <View style={{ flex: 0, alignItems: 'center', flexDirection: 'row', height: 40 }}>
-          <Text style={styles.titleText}>{this.props.title}:</Text>
+        <View
+          style={{
+            flex: 0,
+            alignItems: 'center',
+            flexDirection: 'row',
+            height: 40,
+          }}
+        >
+          <Text style={styles.titleText}>
+            {this.props.title}:
+          </Text>
           <View style={styles.valueContainer}>
             {valueArray.map((c, i) => {
               let isGrayedOut
@@ -135,7 +166,10 @@ export class NumberInput extends React.Component<Props, State> {
                 return (
                   <Text
                     key={i}
-                    style={[styles.valueCharacter, isGrayedOut ? styles.valueCharacterGray : {}]}
+                    style={[
+                      styles.valueCharacter,
+                      isGrayedOut ? styles.valueCharacterGray : {},
+                    ]}
                   >
                     0
                   </Text>
@@ -144,24 +178,38 @@ export class NumberInput extends React.Component<Props, State> {
               return (
                 <Text
                   key={i}
-                  style={[styles.valueCharacter, isGrayedOut ? styles.valueCharacterGray : {}]}
+                  style={[
+                    styles.valueCharacter,
+                    isGrayedOut ? styles.valueCharacterGray : {},
+                  ]}
                 >
                   {c}
                 </Text>
               )
             })}
           </View>
-          <Text style={styles.unitText}>{this.props.unitString}</Text>
+          <Text style={styles.unitText}>
+            {this.props.unitString}
+          </Text>
           <TouchableOpacity
             onPress={this.props.onClear}
-            style={[styles.clearButton, clearButtonDisabled ? styles.clearButtonDisabled : {}]}
+            style={[
+              styles.clearButton,
+              clearButtonDisabled ? styles.clearButtonDisabled : {},
+            ]}
             disabled={clearButtonDisabled}
           >
-            <Text style={[clearButtonDisabled ? styles.clearButtonTextDisabled : {}]}>清除</Text>
+            <Text
+              style={[
+                clearButtonDisabled ? styles.clearButtonTextDisabled : {},
+              ]}
+            >
+              清除
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
-          {['0', '1', '2', '3', '4'].map((d: string) => (
+          {['0', '1', '2', '3', '4'].map((d: string) =>
             <TouchableOpacity
               key={d}
               style={[
@@ -181,11 +229,11 @@ export class NumberInput extends React.Component<Props, State> {
               >
                 {d}
               </Text>
-            </TouchableOpacity>
-          ))}
+            </TouchableOpacity>,
+          )}
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
-          {['5', '6', '7', '8', '9'].map((d: string) => (
+          {['5', '6', '7', '8', '9'].map((d: string) =>
             <TouchableOpacity
               key={d}
               style={[
@@ -205,8 +253,8 @@ export class NumberInput extends React.Component<Props, State> {
               >
                 {d}
               </Text>
-            </TouchableOpacity>
-          ))}
+            </TouchableOpacity>,
+          )}
         </View>
       </View>
     )

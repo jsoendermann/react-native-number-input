@@ -15,6 +15,7 @@
     "url": "git@github.com:jsoendermann/react-native-number-input.git"
   },
   "scripts": {
+    "prettier": "prettier --single-quote --no-semi --trailing-comma all --write \"src/**/*.{ts,tsx}\"",
     "ts:build": "tsc",
     "ts:watch": "tsc --watch",
     "prepublish": "npm run ts:build"
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@types/react": "^15.0.38",
     "@types/react-native": "^0.46.0",
+    "prettier": "^1.5.2",
     "tslint": "^5.5.0",
     "typescript": "^2.4.1"
   }
