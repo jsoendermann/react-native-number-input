@@ -13,6 +13,7 @@ export interface Props {
 
   title?: string
   unitString?: string
+  clearString?: string
 
   inputState?: InputState
 
@@ -31,6 +32,7 @@ export default class NumberInput extends React.Component<Props, State> {
 
     title: '',
     unitString: '',
+    clearString: 'Clear',
 
     onValueChange: () => {},
     onClear: () => {},
@@ -177,7 +179,9 @@ export default class NumberInput extends React.Component<Props, State> {
             style={[styles.clearButton, clearButtonDisabled ? styles.clearButtonDisabled : {}]}
             disabled={clearButtonDisabled}
           >
-            <Text style={[clearButtonDisabled ? styles.clearButtonTextDisabled : {}]}>清除</Text>
+            <Text style={[clearButtonDisabled ? styles.clearButtonTextDisabled : {}]}>
+              {this.props.clearString!}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
