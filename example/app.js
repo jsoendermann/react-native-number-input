@@ -10,18 +10,21 @@ import { AppRegistry, StyleSheet, Text, View } from 'react-native'
 import NumberInput from 'react-native-number-input'
 
 export default class App extends Component {
-  state = { value: 12 }
+  state = { value: null }
   render() {
     return (
       <View style={styles.container}>
         <NumberInput
-          style={{ width: 300 }}
+          style={{ width: 300, height: 300 }}
           title="Haluo"
-          onValueChange={console.log}
-          onClear={() => console.log('CLEAR')}
+          onValueChange={value => this.setState({ value })}
+          onClear={() => this.setState({ value: null })}
           numberOfIntegerDigits={4}
           numberOfDecimalDigits={2}
         />
+        <Text>
+          {String(this.state.value)}
+        </Text>
       </View>
     )
   }

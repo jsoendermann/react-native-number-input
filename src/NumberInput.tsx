@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { View, TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native'
+import styled from 'styled-components/native'
 
 import { getDigitAtIndex, setDigitAtIndex } from './utils'
 
@@ -10,6 +11,20 @@ export interface InputState {
 
 export interface Props {
   style?: ViewStyle
+
+  titleTextStyle?: TextStyle
+  numberTextStyle?: TextStyle
+  inactiveNumberTextStyle?: TextStyle
+  unitTextStyle?: TextStyle
+  clearButtonStyle: ViewStyle
+  inactiveClearButtonStyle: ViewStyle
+  clearTextStyle?: TextStyle
+  inactiveClearTextStyle?: TextStyle
+
+  digitsButtonStyle?: ViewStyle
+  inactiveDigitsButtonStyle?: ViewStyle
+  digitsTextStyle?: TextStyle
+  inactiveDigitsTextStyle?: TextStyle
 
   title?: string
   unitString?: string
@@ -29,6 +44,10 @@ export type State = InputState
 export default class NumberInput extends React.Component<Props, State> {
   static defaultProps: Partial<Props> = {
     style: {},
+    titleTextStyle: {},
+    numberTextStyle: {},
+    clearTextStyle: {},
+    digitsTextStyle: {},
 
     title: '',
     unitString: '',
@@ -129,166 +148,187 @@ export default class NumberInput extends React.Component<Props, State> {
     const digitButtonsDisabled =
       nextDigitIndex >= this.props.numberOfIntegerDigits + this.props.numberOfDecimalDigits!
 
-    return (
-      <View style={[{ height: 140 }, this.props.style]}>
-        <View
-          style={{
-            flex: 0,
-            alignItems: 'center',
-            flexDirection: 'row',
-            height: 40,
-          }}
-        >
-          <Text style={styles.titleText}>
-            {this.props.title}:
-          </Text>
-          <View style={styles.valueContainer}>
-            {valueArray.map((c, i) => {
-              let isGrayedOut
-              if (nextDigitIndex <= this.props.numberOfIntegerDigits) {
-                isGrayedOut = i > nextDigitIndex - 1
-              } else {
-                isGrayedOut = i > nextDigitIndex
-              }
+    const valueElements = valueArray.map((c, i) => {
+      let isGrayedOut
+      if (nextDigitIndex <= this.props.numberOfIntegerDigits) {
+        isGrayedOut = i > nextDigitIndex - 1
+      } else {
+        isGrayedOut = i > nextDigitIndex
+      }
 
-              if (c === null) {
-                return (
-                  <Text
-                    key={i}
-                    style={[styles.valueCharacter, isGrayedOut ? styles.valueCharacterGray : {}]}
-                  >
-                    0
-                  </Text>
-                )
-              }
-              return (
-                <Text
-                  key={i}
-                  style={[styles.valueCharacter, isGrayedOut ? styles.valueCharacterGray : {}]}
-                >
-                  {c}
-                </Text>
-              )
-            })}
-          </View>
-          <Text style={styles.unitText}>
+      if (c === null) {
+        return (
+          <InactiveValueCharacter
+            key={i}
+            style={[
+              this.props.numberTextStyle,
+              isGrayedOut ? this.props.inactiveNumberTextStyle : {},
+            ]}
+          >
+            0
+          </InactiveValueCharacter>
+        )
+      }
+      return (
+        <ValueCharacter
+          key={i}
+          style={[
+            this.props.numberTextStyle,
+            isGrayedOut ? this.props.inactiveNumberTextStyle : {},
+          ]}
+        >
+          {c}
+        </ValueCharacter>
+      )
+    })
+
+    const zeroToFour = ['0', '1', '2', '3', '4']
+    const fiveToNine = ['5', '6', '7', '8', '9']
+
+    return (
+      <View style={this.props.style}>
+        <TopRowContainer>
+          <TitleText style={this.props.titleTextStyle}>
+            {this.props.title}:
+          </TitleText>
+
+          <ValueContainer>
+            {valueElements}
+          </ValueContainer>
+
+          <UnitText style={this.props.unitTextStyle}>
             {this.props.unitString}
-          </Text>
-          <TouchableOpacity
+          </UnitText>
+
+          <ClearButton
             onPress={this.onClear}
-            style={[styles.clearButton, clearButtonDisabled ? styles.clearButtonDisabled : {}]}
+            style={[
+              this.props.clearButtonStyle,
+              clearButtonDisabled ? this.props.inactiveClearButtonStyle : {},
+            ]}
             disabled={clearButtonDisabled}
           >
-            <Text style={[clearButtonDisabled ? styles.clearButtonTextDisabled : {}]}>
+            <Text
+              style={[
+                this.props.clearTextStyle,
+                clearButtonDisabled ? this.props.inactiveClearTextStyle : {},
+              ]}
+            >
               {this.props.clearString!}
             </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          {['0', '1', '2', '3', '4'].map((d: string) =>
-            <TouchableOpacity
+          </ClearButton>
+        </TopRowContainer>
+
+        <DigitRowContainer>
+          {zeroToFour.map((d: string) =>
+            <DigitButton
               key={d}
               style={[
-                styles.digitButton,
-                digitButtonsDisabled ? styles.digitButtonDisabled : {},
+                this.props.digitsButtonStyle,
+                digitButtonsDisabled ? this.props.inactiveDigitsButtonStyle : {},
                 d === '0' ? { marginLeft: 0 } : {},
                 d === '4' ? { marginRight: 0 } : {},
               ]}
               onPress={() => this.onDigitPress(d)}
               disabled={digitButtonsDisabled}
             >
-              <Text
+              <DigitText
                 style={[
-                  styles.digitButtonText,
-                  digitButtonsDisabled ? styles.digitButtonTextDisabled : {},
+                  this.props.digitsTextStyle,
+                  digitButtonsDisabled ? this.props.inactiveDigitsTextStyle : {},
                 ]}
               >
                 {d}
-              </Text>
-            </TouchableOpacity>,
+              </DigitText>
+            </DigitButton>,
           )}
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          {['5', '6', '7', '8', '9'].map((d: string) =>
-            <TouchableOpacity
+        </DigitRowContainer>
+        <DigitRowContainer>
+          {fiveToNine.map((d: string) =>
+            <DigitButton
               key={d}
               style={[
-                styles.digitButton,
-                digitButtonsDisabled ? styles.digitButtonDisabled : {},
+                this.props.digitsButtonStyle,
+                digitButtonsDisabled ? this.props.inactiveDigitsButtonStyle : {},
                 d === '5' ? { marginLeft: 0 } : {},
                 d === '9' ? { marginRight: 0 } : {},
               ]}
               onPress={() => this.onDigitPress(d)}
               disabled={digitButtonsDisabled}
             >
-              <Text
+              <DigitText
                 style={[
-                  styles.digitButtonText,
-                  digitButtonsDisabled ? styles.digitButtonTextDisabled : {},
+                  this.props.digitsTextStyle,
+                  digitButtonsDisabled ? this.props.inactiveDigitsTextStyle : {},
                 ]}
               >
                 {d}
-              </Text>
-            </TouchableOpacity>,
+              </DigitText>
+            </DigitButton>,
           )}
-        </View>
+        </DigitRowContainer>
       </View>
     )
   }
 }
 
-const styles = StyleSheet.create({
-  titleText: {
-    fontSize: 20,
-    marginRight: 10,
-  } as TextStyle,
-  valueContainer: {
-    flexDirection: 'row',
-    marginRight: 10,
-  } as ViewStyle,
-  valueCharacter: {
-    fontSize: 20,
-    fontWeight: '800',
-    fontFamily: 'Courier New',
-  } as TextStyle,
-  valueCharacterGray: {
-    color: '#ccc',
-  } as TextStyle,
-  unitText: {
-    fontSize: 20,
-    flex: 1,
-  } as TextStyle,
-  clearButton: {
-    borderRadius: 4,
-    padding: 5,
-    margin: 5,
-    marginRight: 0,
-    borderWidth: 1,
-    borderColor: '#aaa',
-  } as ViewStyle,
-  clearButtonDisabled: {
-    borderColor: '#ccc',
-  } as ViewStyle,
-  clearButtonTextDisabled: {
-    color: '#aaa',
-  } as TextStyle,
-  digitButton: {
-    borderRadius: 4,
-    padding: 5,
-    flex: 1,
-    height: 45,
-    margin: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#d8d8d8',
-  } as ViewStyle,
-  digitButtonDisabled: {
-    backgroundColor: '#f4f4f4',
-  } as ViewStyle,
-  digitButtonText: {
-    fontSize: 16,
-  },
-  digitButtonTextDisabled: {
-    color: '#aaa',
-  } as TextStyle,
-})
+const TopRowContainer = styled.View`
+  flex-grow: 0;
+  flex-direction: row;
+  align-items: center;
+
+  height: 40;
+`
+
+const TitleText = styled.Text`
+  font-size: 20;
+  margin-right: 10;
+`
+
+const ValueContainer = styled.View`
+  flex-direction: row;
+  margin-right: auto;
+`
+
+const ValueCharacter = styled.Text`
+  font-size: 20;
+  font-weight: 800;
+  font-family: Courier New;
+`
+
+const InactiveValueCharacter = ValueCharacter.extend`color: #ccc;`
+
+const UnitText = styled.Text`
+  flex: 1;
+  font-size: 20;
+`
+
+const ClearButton = styled.TouchableOpacity`
+  border-radius: 4;
+  border-width: 1;
+  border-color: #aaa;
+
+  padding: 5px;
+
+  margin: 5px;
+  margin-right: 0px;
+`
+
+const DigitRowContainer = styled.View`
+  flex: 1;
+  flex-direction: row;
+`
+
+const DigitButton = styled.TouchableOpacity`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+
+  margin: 2px;
+  padding: 5px;
+  border-radius: 4;
+
+  background-color: #d8d8d8;
+`
+
+const DigitText = styled.Text`font-size: 16;`
